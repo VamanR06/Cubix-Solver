@@ -1,1 +1,3 @@
-# Drip-Rater
+# Cubix
+
+Python-ML Rubix Cube Solver
