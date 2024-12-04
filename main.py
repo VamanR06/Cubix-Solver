@@ -53,3 +53,4 @@ Systems:
 
 print(kociemba.solve('UUUUUUUUUFFFRRRRRRLLLFFFFFFDDDDDDDDDBBBLLLLLLRRRBBBBBB'))
 
+# U R F D L B - Order to type pieces out for a scramble string
