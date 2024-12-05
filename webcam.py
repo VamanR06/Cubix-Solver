@@ -11,8 +11,6 @@ IMPORTANT
 PRESS q to exit
 PRESS p to snapshot (print array)
 
-
-
 GOOD LUCK TEAM!
 
 -Ayan
@@ -66,6 +64,19 @@ font_scale = 0.75
 color = (255, 255, 255) 
 thickness = 2
 
+# 9 Pixel Locations
+pixel_locs = {
+    (806,398),
+    (953,398),
+    (1095,398),
+    (806,537),
+    (953,537),
+    (1095,537),
+    (806,681),
+    (953,681),
+    (1095,681)
+}
+
 # Main Live Video Loop
 while True:
     # Read a frame from the camera
@@ -84,20 +95,6 @@ while True:
 
     # Define the ROI for placing the logo in the center of the frame
     roi = frame[top_left_y:top_left_y + size, top_left_x:top_left_x + size]
-
-
-    # GET 9 COLORS LOCATION
-    pixel_locs = {
-        (806,398),
-        (953,398),
-        (1095,398),
-        (806,537),
-        (953,537),
-        (1095,537),
-        (806,681),
-        (953,681),
-        (1095,681)
-    }
 
     # Fetch the 9 box pixel values
     for p in pixel_locs:
