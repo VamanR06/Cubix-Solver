@@ -11,6 +11,7 @@ IMPORTANT
 
 PRESS q to exit
 PRESS p to snapshot (print array)
+PRESS r to reset (list of seen colors)
 
 GOOD LUCK TEAM!
 
