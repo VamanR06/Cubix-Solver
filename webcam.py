@@ -40,7 +40,7 @@ Notes:
 
 '''
 
-
+window_name = "Rubik's Cube"
 
 # Define reference Rubik's Cube colors (RGB)
 rubiks_colors = {
@@ -80,7 +80,7 @@ img2gray = cv2.cvtColor(logo, cv2.COLOR_BGR2GRAY)
 ret, mask = cv2.threshold(img2gray, 1, 255, cv2.THRESH_BINARY) 
 
 # Create Window
-cv2.namedWindow("Live Video")
+cv2.namedWindow(window_name)
 
 # Text info
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -145,15 +145,20 @@ while True:
     side_color = ""
 
     
-    # Fetch the 9 box pixel values and display them in the grid
+    # Fetch the 9 box pixel values and display them in the grid REAL-TIME
     for p in pixel_locs:
         pix = frame[p[1],p[0]]
         color_name =  get_pixel_name(tuple(reversed(tuple(pix))))
         color_array.append(color_name)
         if len(color_array) == 5:
             side_color = color_name
+            if side_color == expected_color:
+                color = (0,255,0)
+            else:
+                color = (0,0,255)
         text = f"{color_name}"
         cv2.putText(frame, text, (p[0]-20,p[1]), font, font_scale, color, thickness)
+        color = (255,255,255)
 
     # Take photo if "P" is pressed
     if cv2.waitKey(1) == ord('p'):
@@ -201,7 +206,7 @@ while True:
     cv2.putText(frame, "PRESS R TO RESET", (center_x-110,110), font, font_scale, color, thickness)
 
     # Display the frame
-    cv2.imshow('Live Video', frame)
+    cv2.imshow(window_name, frame)
 
     # Exit the loop if the 'q' key is pressed
     if cv2.waitKey(1) == ord('q'):
