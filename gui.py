@@ -68,7 +68,7 @@ class RubiksCubeApp(QMainWindow):
 
         # placeholder for camera
 
-        self.camera_placeholder = QLabel("camera placeholder")
+        self.camera_placeholder = QLabel("Camera")
         self.camera_placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.camera_placeholder.setStyleSheet(
             "border: 2px solid #666; padding-top: 160px; padding-bottom: 160px; margin 80px; font-size: 18px;"
@@ -99,26 +99,30 @@ class RubiksCubeApp(QMainWindow):
         left_col.addLayout(face_layout)
 
         # button for taking images
+        
+        turn_on_camera_button = QPushButton("Turn On Camera")
+        turn_on_camera_button.clicked.connect(self.open_camera)
 
         take_picture_button = QPushButton("Take Picture")
-        take_picture_button.clicked.connect(self.open_camera)
-        take_picture_button.setStyleSheet(
-            """
-                                          QPushButton {
-                                                background-color: #0078D7;
-                                                border-radius: 10px;
-                                                padding: 10px;
-                                                color: white;
-                                                font-size: 16px;
-                                            }
-                                            QPushButton:hover {
-                                                background-color: #005FA3;
-                                            }
-                                            QPushButton:pressed {
-                                                background-color: #004080;
-                                            }
-                                              """
-        )
+        for btn in [turn_on_camera_button, take_picture_button]:
+            btn.setStyleSheet(
+                """
+                                            QPushButton {
+                                                    background-color: #0078D7;
+                                                    border-radius: 10px;
+                                                    padding: 10px;
+                                                    color: white;
+                                                    font-size: 16px;
+                                                }
+                                                QPushButton:hover {
+                                                    background-color: #005FA3;
+                                                }
+                                                QPushButton:pressed {
+                                                    background-color: #004080;
+                                                }
+                                                """
+            )
+        left_col.addWidget(turn_on_camera_button)
         left_col.addWidget(take_picture_button)
 
         main_layout.addLayout(left_col)
