@@ -45,11 +45,11 @@ window_name = "Rubik's Cube"
 # Define reference Rubik's Cube colors (RGB)
 rubiks_colors = {
     'White': (255, 255, 255),
-    'Yellow': (255, 255, 0),
+    'Yellow': (255, 234, 20),
     'Red': (216, 29, 36),
     'Blue': (0, 0, 255),
-    'Green': (0, 255, 0),
-    'Orange': (252, 113, 37)
+    'Green': (40, 208, 80),
+    'Orange': (252, 113, 10)
 }
 
 # Function to categorize a given RGB pixel by name
