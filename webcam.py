@@ -61,6 +61,15 @@ def get_pixel_name(pixel_color):
     closest_color = list(rubiks_colors.keys())[closest_index]
     return closest_color
 
+def fetch_pixels(locations):
+    out_colors=[]
+    for (x,y) in locations:
+        pix_out = frame[y,x]
+        pixel_color_name =  get_pixel_name(tuple(reversed(tuple(pix_out))))
+        out_colors.append(pixel_color_name)
+        print(f"{(x,y)} - {pix_out} - {pixel_color_name}")
+    return np.rot90(np.reshape(out_colors, (3,3)), k=-1)
+
 # Array where a given "side" colors are stored
 color_array = []
 
@@ -89,7 +98,7 @@ color = (255, 255, 255)
 thickness = 2
 
 # 9 Pixel Locations
-pixel_locs = {
+pixel_locs = [
     (806,398),
     (953,398),
     (1095,398),
@@ -99,7 +108,7 @@ pixel_locs = {
     (806,681),
     (953,681),
     (1095,681)
-}
+]
 
 i = 0
 steps = [
@@ -144,25 +153,9 @@ while True:
     # Save center color
     side_color = ""
 
-    
-    # Fetch the 9 box pixel values and display them in the grid REAL-TIME
-    for p in pixel_locs:
-        pix = frame[p[1],p[0]]
-        color_name =  get_pixel_name(tuple(reversed(tuple(pix))))
-        color_array.append(color_name)
-        if len(color_array) == 5:
-            side_color = color_name
-            if side_color == expected_color:
-                color = (0,255,0)
-            else:
-                color = (0,0,255)
-        text = f"{color_name}"
-        cv2.putText(frame, text, (p[0]-20,p[1]), font, font_scale, color, thickness)
-        color = (255,255,255)
-
     # Take photo if "P" is pressed
     if cv2.waitKey(1) == ord('p'):
-        # cv2.putText(frame, f"P PRESSED", (10,50), font, font_scale, color, thickness)
+        cv2.putText(frame, f"P PRESSED", (10,50), font, font_scale, color, thickness)
         mid_color = color_array[4]
         if mid_color in sides_seen:
             time.sleep(1)
@@ -178,12 +171,31 @@ while True:
             time.sleep(1)
             cv2.putText(frame, f"NEW SNAPSHOT TAKEN", (10,50), font, font_scale, color, thickness)
             time.sleep(1)
-            print(f'\nNEW SNAPSHOT TAKEN! - {side_color} side\n{np.reshape(color_array, (3,3))}')
+            color_array = fetch_pixels(pixel_locs)
+            print(f'\nNEW SNAPSHOT TAKEN! - {side_color} side\n{np.rot90(color_array)}')
             sides_seen.append(side_color)
             i+=1
+
+            # Auto close after all sides have been seen
             if len(sides_seen) >= 6:
                 break
     color_array = []
+
+    # REAL-TIME Color Display
+    for p in pixel_locs:
+        pix = frame[p[1],p[0]]
+        color_name =  get_pixel_name(tuple(reversed(tuple(pix))))
+        color_array.append(color_name)
+        if len(color_array) == 5:
+            side_color = color_name
+            if side_color == expected_color:
+                color = (0,255,0)
+            else:
+                color = (0,0,255)
+        text = f"{color_name}"
+        cv2.putText(frame, text, (p[0]-20,p[1]), font, font_scale, color, thickness)
+        cv2.putText(frame, f"{p}", (p[0]-20,p[1]+20), font, font_scale, color, thickness)
+        color = (255,255,255)
 
     # Reset what colors have been seen
     if cv2.waitKey(1) == ord('r'):
