@@ -88,7 +88,7 @@ sides_seen = []
 cap = cv2.VideoCapture(0)
 
 # Read Grid image and resize 
-file_name = 'BoxRubik.png'
+file_name = 'images/BoxRubik.png'
 logo = cv2.imread(file_name) 
 size = 600
 logo = cv2.resize(logo, (size, size)) 

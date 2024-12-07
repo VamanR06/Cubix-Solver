@@ -21,7 +21,7 @@ from solver import *
 
 
 # Read Grid image and resize 
-file_name = 'BoxRubik.png'
+file_name = 'images/BoxRubik.png'
 logo = cv2.imread(file_name) 
 size = 600
 logo = cv2.resize(logo, (size, size)) 
@@ -283,13 +283,40 @@ class RubiksCubeApp(QMainWindow):
 
         # setting up right col, 3d visualizer
 
+
+        
+
         right_col = QVBoxLayout()
-        cube_placeholder = QLabel("3D Cube Visualization Here")
-        cube_placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        cube_placeholder.setStyleSheet(
-            "border: 2px solid #666; padding: 20px; margin: 10px; font-size: 18px;"
+
+        # Create QLabel for displaying the image
+        cube_image = QLabel()
+        cube_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        cube_image.setStyleSheet(
+            "border: 2px solid #666; padding: 20px; margin: 10px;"
         )
-        right_col.addWidget(cube_placeholder)
+
+        # Load and set the image dynamically
+        image_path = "images/cubeNote.png"  # Replace this with the path to your image
+        pixmap = QPixmap(image_path)
+        # cube_image.setPixmap(pixmap.scaled(cube_image.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+
+        # Set desired size (width, height) in pixels
+        image_width = 600
+        image_height = 400
+
+        # Scale the image to the specified size
+        cube_image.setPixmap(pixmap.scaled(image_width, image_height, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+
+                
+
+        right_col.addWidget(cube_image)
+
+        # cube_placeholder = QLabel("3D Cube Visualization Here")
+        # cube_placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # cube_placeholder.setStyleSheet(
+        #     "border: 2px solid #666; padding: 20px; margin: 10px; font-size: 18px;"
+        # )
+        # right_col.addWidget(cube_placeholder)
 
         # solve and reset buttons
 
