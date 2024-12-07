@@ -61,14 +61,20 @@ def get_pixel_name(pixel_color):
     closest_color = list(rubiks_colors.keys())[closest_index]
     return closest_color
 
-def fetch_pixels(locations):
+# include side number
+
+# orange side should be rotated 90, rest are ok
+def fetch_pixels(locations, loop):
     out_colors=[]
     for (x,y) in locations:
         pix_out = frame[y,x]
         pixel_color_name =  get_pixel_name(tuple(reversed(tuple(pix_out))))
         out_colors.append(pixel_color_name)
-        print(f"{(x,y)} - {pix_out} - {pixel_color_name}")
-    return np.rot90(np.reshape(out_colors, (3,3)), k=-1)
+        # print(f"{(x,y)} - {pix_out} - {pixel_color_name}")
+    face = np.fliplr(np.rot90(np.rot90(np.reshape(out_colors, (3,3)), k=-1)))
+    if loop == 4:
+        return np.rot90(face)
+    return face
 
 # Array where a given "side" colors are stored
 color_array = []
@@ -125,6 +131,11 @@ steps = [
 # order of side-color we're supposed to see
 order = ["White", "Blue", "Yellow", "Green", "Orange", "Red"]
 
+# FINAL
+ALL_SIDES = np.array()
+
+
+
 # Main Live Video Loop
 while True:
     # Read a frame from the camera
@@ -153,6 +164,9 @@ while True:
     # Save center color
     side_color = ""
 
+    # FINAL SIDES
+    FINAL_SIDES= []
+
     # Take photo if "P" is pressed
     if cv2.waitKey(1) == ord('p'):
         cv2.putText(frame, f"P PRESSED", (10,50), font, font_scale, color, thickness)
@@ -171,10 +185,11 @@ while True:
             time.sleep(1)
             cv2.putText(frame, f"NEW SNAPSHOT TAKEN", (10,50), font, font_scale, color, thickness)
             time.sleep(1)
-            color_array = fetch_pixels(pixel_locs)
-            print(f'\nNEW SNAPSHOT TAKEN! - {side_color} side\n{np.rot90(color_array)}')
+            color_array = fetch_pixels(pixel_locs, i)
+            print(f'\nNEW SNAPSHOT TAKEN! - {mid_color} side\n{color_array}')
             sides_seen.append(side_color)
             i+=1
+            ALL_SIDES.append(color_array)
 
             # Auto close after all sides have been seen
             if len(sides_seen) >= 6:
@@ -230,5 +245,5 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 
-
+print(f'\n\n{ALL_SIDES}')
 
