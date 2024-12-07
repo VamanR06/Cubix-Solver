@@ -32,6 +32,8 @@ Map each face color to the corresponding ULFRBD value
 U R F D L B - Order to type pieces out for a scramble string
 '''
 
+__all__ = ["Cube", "Face", "Piece"]
+
 from typing import Dict, List
 from dataclasses import dataclass
 from itertools import batched
@@ -63,25 +65,31 @@ class Face:
         self.side = side
         self.pieces = [Piece(face=self, color=color, position=pos) for pos, color in enumerate(pieces)]
 
-    def __str__(self):
+    def __repr__(self):
         return "Face: " + self.side + "\n" + "\n".join([' '.join([str(piece) for piece in row]) for row in batched(self.pieces, 3)])
 
 class Cube:
-    def __init__(self, faces: Dict[str, List[str]]):
-        if len(faces) != 6:
-            raise ValueError("Cube must have 6 faces")
-        
-        self.faces = {side: Face(side=side, pieces=pieces) for side, pieces in faces.items()}
+    FACE_ORDER = ["U", "R", "F", "D", "L", "B"]
+    def __init__(self, faces: Dict[str, List[str]] = None):
+        self.faces = {side: Face(side=side, pieces=faces[side]) if faces else None for side in self.FACE_ORDER}
+
+    def set_face(self, side: str, pieces: List[str]):
+        self.faces[colors_to_faces[side]] = Face(side=colors_to_faces[side], pieces=pieces)
 
     def solve(self):
-        face_order = ["Up", "Right", "Front", "Down", "Left", "Back"]
+        if not all(face.pieces for face in self.faces.values()):
+            raise ValueError("Cube must have all faces")
 
         cube_string = ""
-        for face in face_order:
+        for face in self.FACE_ORDER:
             for piece in self.faces[face].pieces:
                 cube_string += colors_to_faces[piece.color.lower()]
 
         return solve(cube_string)
+
+    def print(self):
+        for i in self.faces:
+            print(self.faces[i])
 
     def __repr__(self):
         return "\n".join([str(face) for face in self.faces])

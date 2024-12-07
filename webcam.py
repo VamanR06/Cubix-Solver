@@ -72,8 +72,11 @@ def fetch_pixels(locations, loop):
         out_colors.append(pixel_color_name)
         # print(f"{(x,y)} - {pix_out} - {pixel_color_name}")
     face = np.fliplr(np.rot90(np.rot90(np.reshape(out_colors, (3,3)), k=-1)))
-    if loop == 4:
-        return np.rot90(face)
+    if loop == 4 or loop == 5:
+        face = np.rot90(face, k=-1)
+
+    face = face.flatten().tolist()
+
     return face
 
 # Array where a given "side" colors are stored
@@ -132,9 +135,7 @@ steps = [
 order = ["White", "Blue", "Yellow", "Green", "Orange", "Red"]
 
 # FINAL
-ALL_SIDES = np.array()
-
-
+ALL_SIDES = []
 
 # Main Live Video Loop
 while True:
@@ -163,9 +164,6 @@ while True:
 
     # Save center color
     side_color = ""
-
-    # FINAL SIDES
-    FINAL_SIDES= []
 
     # Take photo if "P" is pressed
     if cv2.waitKey(1) == ord('p'):
@@ -212,11 +210,20 @@ while True:
         cv2.putText(frame, f"{p}", (p[0]-20,p[1]+20), font, font_scale, color, thickness)
         color = (255,255,255)
 
+    # Delete recent side (retake)
+    if cv2.waitKey(1) == ord('d'):
+        cv2.putText(frame, f"RESET", (10,50), font, font_scale, color, thickness)
+        i-=1
+        sides_seen = sides_seen[:-1]
+        ALL_SIDES = ALL_SIDES[:-1]
+        print("\n*DELETE LATEST SIDE*")
+
     # Reset what colors have been seen
     if cv2.waitKey(1) == ord('r'):
         cv2.putText(frame, f"RESET", (10,50), font, font_scale, color, thickness)
         i = 0
         sides_seen = []
+        ALL_SIDES = []
         print("\n*RESET CACHE*")
 
     # Set an index of where the mask is 
@@ -231,6 +238,7 @@ while True:
     cv2.putText(frame, "HOLD Q TO QUIT", (center_x-100,50), font, font_scale, color, thickness)
     cv2.putText(frame, "PRESS P TO SNAPSHOT", (center_x-140,80), font, font_scale, color, thickness)
     cv2.putText(frame, "PRESS R TO RESET", (center_x-110,110), font, font_scale, color, thickness)
+    cv2.putText(frame, "PRESS D TO DELETE", (center_x-112,140), font, font_scale, color, thickness)
 
     # Display the frame
     cv2.imshow(window_name, frame)

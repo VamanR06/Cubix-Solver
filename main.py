@@ -1,8 +1,6 @@
 import kociemba
-
-
-
-
+from gui import RubiksCubeApp
+from PySide6.QtWidgets import QApplication
 
 ''''
              |------------|
@@ -49,6 +47,25 @@ Systems:
 
 '''
 
+app = QApplication([])
+window = RubiksCubeApp()
+window.show()
+app.exec()
+
+i = 0
+steps = [
+
+    "1. Show cube such that white-center side faces the camera and red-center side faces down",
+    "2. Turn the cube to your left so now blue-center should face the camera",
+    "3. Turn the cube left again to show yellow-center",
+    "4. Left again for green-center",
+    "5. Turn cube up to show orange-center (top)",
+    "6. Turn cube up TWICE to show red-center (bottom)"
+
+]
+
+order = ["White", "Blue", "Yellow", "Green", "Orange", "Red"]
+ALL_SIDES = []
 
 
 print(kociemba.solve('UUUUUUUUUFFFRRRRRRLLLFFFFFFDDDDDDDDDBBBLLLLLLRRRBBBBBB'))
