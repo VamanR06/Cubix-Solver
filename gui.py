@@ -82,19 +82,12 @@ def get_pixel_name(pixel_color):
 
 def fetch_pixels(locations, frame):
     out_colors=[]
-    mid_color = ""
     for i, (x,y) in enumerate(locations):
         pix_out = frame[y,x]
         pixel_color_name =  get_pixel_name(tuple(reversed(tuple(pix_out))))
-        if i == 4:
-            mid_color = pixel_color_name
-            
         out_colors.append(pixel_color_name)
         
     face = np.fliplr(np.reshape(out_colors, (3,3)))
-    # if mid_color == "Orange" or mid_color == "Red" or mid_color == "Green":
-    #     face = np.fliplr(face)
-
     face = face.flatten().tolist()
 
     return face
