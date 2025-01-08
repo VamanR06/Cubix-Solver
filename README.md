@@ -1,6 +1,6 @@
 # Cubix
 
-Python-ML Rubix Cube Solver
+Python-ML Rubik's Cube Solver
 
 Built entirely in Python using OpenCV, PySide6, and SkLearn!
 
